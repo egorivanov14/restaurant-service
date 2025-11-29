@@ -1,0 +1,1 @@
+ALTER TABLE dishes RENAME COLUMN imageUrl TO image_url;
