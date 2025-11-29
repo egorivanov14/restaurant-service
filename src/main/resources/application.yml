@@ -25,6 +25,9 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
+jwt:
+  secret: my-super-secret-key-for-jwt-which-is-32-chars-long
+  expiration: 86400000
 
 logging:
   level:

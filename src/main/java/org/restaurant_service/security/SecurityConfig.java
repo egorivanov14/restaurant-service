@@ -24,11 +24,17 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Публичные endpoints
-                        .requestMatchers("/api/restaurants", "/api/restaurants/**").permitAll()
+                        // Публичные endpoints (доступны всем)
+                        .requestMatchers(
+                                "/api/restaurants",                    // GET список
+                                "/api/restaurants/search",             // GET поиск
+                                "/api/restaurants/{id}",               // GET конкретный ресторан
+                                "/api/restaurants/{id}/dishes",        // GET блюда ресторана
+                                "/api/restaurants/{id}/dishes/{dishId}" // GET конкретное блюдо
+                        ).permitAll()
                         // Swagger UI
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        // Остальное требует аутентификации
+                        // Всё остальное требует аутентификации
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

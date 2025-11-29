@@ -33,12 +33,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String username = jwtTokenProvider.getUsername(token);
             List<String> roles = jwtTokenProvider.getRoles(token);
 
+            // ⭐ Добавляем префикс ROLE_ к каждой роли
+            var authorities = roles.stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                    .toList();
+
+            log.debug("User '{}' has roles: {}", username, authorities); // Для отладки
+
             UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            username,
-                            null,
-                            roles.stream().map(SimpleGrantedAuthority::new).toList()
-                    );
+                    new UsernamePasswordAuthenticationToken(username, null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
